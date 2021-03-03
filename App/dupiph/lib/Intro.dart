@@ -9,7 +9,7 @@ class IntroPage extends StatelessWidget {
       body: Center(
         child: TypewriterAnimatedTextKit(
           text: [
-            "당신의 두피관리",
+            "당신의 두피관리앱",
             "DupiPH",
           ],
           textStyle: TextStyle(
