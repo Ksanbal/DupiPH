@@ -9,7 +9,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  camera: ^0.5.8+11
+  sqflite:
+  path_provider:
+  path:
   animated_text_kit: ^3.1.2
+  intl: ^0.16.0
+  fl_chart: any
 
   cupertino_icons: ^1.0.0
 
@@ -18,5 +24,6 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
+  assets:
+    - images/Intro_background.jpeg
