@@ -40,6 +40,10 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	
+	<!-- Camera -->
+	<!-- <key>NSCameraUsageDescription</key>
+	<string>Use Camera for take picture of Litumus</string> -->
 	<false/>
 </dict>
 </plist>
