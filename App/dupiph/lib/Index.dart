@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'Menu_Items/Cop_info.dart';
 import 'Menu_Items/Ser_info.dart';
+import 'Menu_Items/DB_info.dart';
 import 'Camera.dart';
 
 class IndexPage extends StatefulWidget {
@@ -54,6 +55,7 @@ class _IndexPageState extends State<IndexPage> {
   _appBar() {
     return AppBar(
       title: Text('DupiPH'),
+      centerTitle: true,
       backgroundColor: Color(0xff34a1ae),
       elevation: 0,
     );
@@ -105,6 +107,22 @@ class _IndexPageState extends State<IndexPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => InfoPage_Ser(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: Text(
+              'DB list',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InfoPage_DB(),
                 ),
               );
             },
