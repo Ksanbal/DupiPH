@@ -28,3 +28,4 @@ flutter:
   uses-material-design: true
   assets:
     - images/Intro_background.jpeg
+    - images/Camera_overlay.png
