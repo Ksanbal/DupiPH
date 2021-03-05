@@ -4,7 +4,38 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import 'Index.dart';
 
-class ResultPage extends StatelessWidget {
+class ResultPage extends StatefulWidget {
+  @override
+  _ResultPageState createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 4000,
+      ),
+    );
+
+    _animation = Tween<double>(
+      begin: 0,
+      end: 85,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn))
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _controller.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +51,7 @@ class ResultPage extends StatelessWidget {
                 _backGround(),
                 // 측정값 & 인디케이터
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // 측정결과 Text
                     _titleText(),
@@ -28,16 +59,16 @@ class ResultPage extends StatelessWidget {
                     SizedBox(height: 5),
                     _dateText(),
                     // indicator
-                    SizedBox(height: 20),
+                    SizedBox(height: 35),
                     _circleIndicator(),
-                    SizedBox(height: 10),
+                    // SizedBox(height: 10),
                   ],
                 ),
               ],
             ),
           ),
           Expanded(
-            flex: 5,
+            flex: 3,
             child: Padding(
               padding: EdgeInsets.all(20),
               child: Column(
@@ -58,6 +89,7 @@ class ResultPage extends StatelessWidget {
   _appBar(context) {
     return AppBar(
       title: Text('DupiPH'),
+      centerTitle: true,
       elevation: 0,
       backgroundColor: Color(0xff34a1ae),
       leading: IconButton(
@@ -157,28 +189,29 @@ class ResultPage extends StatelessWidget {
 
   _circleIndicator() {
     return Container(
-      width: 200,
-      height: 200,
+      width: 250,
+      height: 250,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
       ),
       child: CircularStepProgressIndicator(
+        startingAngle: 0,
         totalSteps: 100,
-        currentStep: 74,
+        currentStep: _animation.value.toInt(),
         stepSize: 10,
         selectedColor: Color(0xff5ee0ef),
-        unselectedColor: Colors.grey[200],
+        unselectedColor: Colors.white,
         padding: 0,
-        width: 150,
-        height: 150,
+        width: 250,
+        height: 250,
         selectedStepSize: 15,
         roundedCap: (_, __) => true,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '적정',
+              '손상도 15%',
               style: TextStyle(
                 fontSize: 40,
                 color: Color(0xff2f7078),
