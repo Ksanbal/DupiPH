@@ -6,6 +6,7 @@ class InfoPage_Cop extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('회사소개'),
+        centerTitle: true,
       ),
       body: Center(
         child: Text('회사 소개입니다.'),
