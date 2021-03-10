@@ -17,6 +17,8 @@ dependencies:
   intl: ^0.16.0
   fl_chart: any
   step_progress_indicator: any
+  image_pixels: ^2.0.0
+  image: any
 
   cupertino_icons: ^1.0.0
 
