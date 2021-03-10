@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'Result.dart';
 
-import 'SQLite/Model.dart' as mo;
-import 'SQLite/Database.dart' as db;
+import 'GetColor.dart';
+import 'package:path/path.dart';
+
+// import 'SQLite/Model.dart' as mo;
+// import 'SQLite/Database.dart' as db;
 
 class CameraPage extends StatefulWidget {
   @override
@@ -74,13 +78,9 @@ class _CameraPageState extends State<CameraPage> {
     return Scaffold(
       appBar: _appBar(),
       extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          // 카메라
-          _Camera(),
-        ],
-      ),
-      floatingActionButton: _floatingActionButton(),
+      // body: _Camera(),
+      body: CameraPreview(controller),
+      floatingActionButton: _floatingActionButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -91,9 +91,9 @@ class _CameraPageState extends State<CameraPage> {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      actions: [
-        _cameraSwitching(),
-      ],
+      // actions: [
+      //   _cameraSwitching(),
+      // ],
     );
   }
 
@@ -123,6 +123,75 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
+  _floatingActionButton(context) {
+    return Row(
+      children: [
+        Expanded(child: _callGallery()),
+        Expanded(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: 110,
+                width: 110,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xff89cadb).withOpacity(0.3),
+                ),
+              ),
+              Container(
+                height: 90,
+                width: 90,
+                child: FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Color(0xff43b0cc),
+                    size: 60,
+                  ),
+                  onPressed: () async {
+                    try {
+                      final path = join(
+                        (await getTemporaryDirectory()).path,
+                        '${DateTime.now()}.png',
+                      );
+
+                      await controller.takePicture(path);
+
+                      print(path);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ColorPickerWidget(
+                            test_path: path,
+                          ),
+                        ),
+                      );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+        Expanded(child: _cameraSwitching()),
+      ],
+    );
+  }
+
+  _callGallery() {
+    return IconButton(
+        icon: Icon(
+          Icons.insert_photo,
+          color: Colors.white,
+          size: 60,
+        ),
+        onPressed: () {});
+  }
+
   _cameraSwitching() {
     if (cameras == null || cameras.isEmpty) {
       return Spacer();
@@ -134,6 +203,7 @@ class _CameraPageState extends State<CameraPage> {
         icon: Icon(
           Icons.flip_camera_ios,
           color: Colors.white,
+          size: 60,
         ),
         onPressed: () {
           selectedCameraIdx = selectedCameraIdx < cameras.length - 1
@@ -142,39 +212,5 @@ class _CameraPageState extends State<CameraPage> {
           CameraDescription selectedCamera = cameras[selectedCameraIdx];
           _initCameraController(selectedCamera);
         });
-  }
-
-  _floatingActionButton() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          height: 120,
-          width: 120,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xff89cadb).withOpacity(0.3),
-          ),
-        ),
-        Container(
-          height: 100,
-          width: 100,
-          child: FloatingActionButton(
-            backgroundColor: Colors.white,
-            child: Icon(
-              Icons.camera_alt,
-              color: Color(0xff43b0cc),
-              size: 60,
-            ),
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ResultPage()),
-              );
-            },
-          ),
-        )
-      ],
-    );
   }
 }
