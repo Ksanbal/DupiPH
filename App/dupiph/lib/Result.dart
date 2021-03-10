@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import 'Index.dart';
 
 class ResultPage extends StatefulWidget {
+  ResultPage({Key key, this.color_code}) : super(key: key);
+  final Color color_code;
+
   @override
   _ResultPageState createState() => _ResultPageState();
 }
@@ -17,6 +21,8 @@ class _ResultPageState extends State<ResultPage>
   @override
   void initState() {
     super.initState();
+
+    print(widget.color_code);
 
     _controller = AnimationController(
       vsync: this,
@@ -44,27 +50,31 @@ class _ResultPageState extends State<ResultPage>
         children: [
           Expanded(
             flex: 5,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                // Background
-                _backGround(),
-                // 측정값 & 인디케이터
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // 측정결과 Text
-                    _titleText(),
-                    // DateText
-                    SizedBox(height: 5),
-                    _dateText(),
-                    // indicator
-                    SizedBox(height: 35),
-                    _circleIndicator(),
-                    // SizedBox(height: 10),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xff34a1ae),
+                    Color(0xff007f8d),
                   ],
                 ),
-              ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 측정결과 Text
+                  _titleText(),
+                  // DateText
+                  SizedBox(height: 5),
+                  _dateText(),
+                  // indicator
+                  SizedBox(height: 20),
+                  _circleIndicator(),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -72,8 +82,28 @@ class _ResultPageState extends State<ResultPage>
             child: Padding(
               padding: EdgeInsets.all(20),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      Container(
+                        height: 15,
+                        width: 5,
+                        color: Colors.black,
+                      ),
+                      SizedBox(width: 20),
+                      Text(
+                        '두피상태',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   // 지성 - 건성 인디케이터
                   _barIndicator(),
                 ],
@@ -92,14 +122,14 @@ class _ResultPageState extends State<ResultPage>
       centerTitle: true,
       elevation: 0,
       backgroundColor: Color(0xff34a1ae),
-      leading: IconButton(
-          icon: Icon(
-            Icons.refresh,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          }),
+      // leading: IconButton(
+      //     icon: Icon(
+      //       Icons.refresh,
+      //       color: Colors.white,
+      //     ),
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //     }),
       actions: [
         IconButton(
             icon: Icon(
@@ -113,21 +143,6 @@ class _ResultPageState extends State<ResultPage>
               );
             })
       ],
-    );
-  }
-
-  _backGround() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xff34a1ae),
-            Color(0xff007f8d),
-          ],
-        ),
-      ),
     );
   }
 
@@ -164,26 +179,13 @@ class _ResultPageState extends State<ResultPage>
 
   _dateText() {
     List weekday = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          '${DateFormat('yyyy.MM.dd').format(DateTime.now())}  ',
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          '${weekday[DateTime.now().weekday - 1]}',
-          style: TextStyle(
-            fontSize: 23,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
+    return Text(
+      '${DateFormat('yyyy.MM.dd').format(DateTime.now())}  ${weekday[DateTime.now().weekday - 1]}',
+      style: TextStyle(
+        fontSize: 25,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 
@@ -191,60 +193,145 @@ class _ResultPageState extends State<ResultPage>
     return Container(
       width: 250,
       height: 250,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-      ),
+      // decoration: BoxDecoration(
+      //   shape: BoxShape.circle,
+      // ),
       child: CircularStepProgressIndicator(
-        startingAngle: 0,
-        totalSteps: 100,
-        currentStep: _animation.value.toInt(),
-        stepSize: 10,
-        selectedColor: Color(0xff5ee0ef),
-        unselectedColor: Colors.white,
-        padding: 0,
-        width: 250,
-        height: 250,
-        selectedStepSize: 15,
-        roundedCap: (_, __) => true,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '손상도 15%',
-              style: TextStyle(
-                fontSize: 40,
-                color: Color(0xff2f7078),
-                fontWeight: FontWeight.bold,
+          totalSteps: 100,
+          currentStep: _animation.value.toInt(),
+          selectedColor: Color(0xff7DEFFC),
+          unselectedColor: Color(0xff146A74),
+          padding: 0,
+          width: 250,
+          height: 250,
+          stepSize: 10,
+          selectedStepSize: 20,
+          child: Center(
+            child: Container(
+              height: 190,
+              width: 190,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 10,
+                  color: Colors.transparent,
+                ),
+                color: Colors.white,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '모발 손상도',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xff325054),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '15%',
+                    style: TextStyle(
+                      fontSize: 55,
+                      color: Color(0xff325054),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '이대로 유지해주세요.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xff0099A3),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Text(
-              '이대로 유지해주세요.',
-              style: TextStyle(
-                fontSize: 15,
-                color: Color(0xff2f7078),
-              ),
-            ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 
   _barIndicator() {
     return Column(
       children: [
+        // 표시기
+        Row(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 100 * 20,
+            ),
+            Container(
+              height: 45,
+              width: 70,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Column(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                            color: Color(0xffce9014),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "PH 5.0",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Spacer(
+                        flex: 1,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 30,
+                    width: 3,
+                    decoration: BoxDecoration(
+                      color: Color(0xffce9014),
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                  ),
+                  Container(
+                    height: 8,
+                    width: 8,
+                    decoration: BoxDecoration(
+                      color: Color(0xffce9014),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 5),
+        // 인디케이터
         StepProgressIndicator(
-          totalSteps: 15,
-          currentStep: 12,
-          size: 20,
-          selectedColor: Colors.amber,
-          unselectedColor: Colors.black,
+          totalSteps: 10,
+          currentStep: 5,
+          size: 30,
+          padding: 2.0,
           roundedEdges: Radius.circular(10),
-          gradientColor: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomRight,
-              colors: [Color(0xffd86565), Color(0xff7464b7)]),
+          selectedGradientColor: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xffd86565), Color(0xff77C9A3)],
+          ),
+          unselectedGradientColor: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xff77C9A3), Color(0xff7464b7)],
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
