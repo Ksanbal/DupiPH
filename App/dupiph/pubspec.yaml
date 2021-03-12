@@ -19,12 +19,19 @@ dependencies:
   step_progress_indicator: any
   image_pixels: ^2.0.0
   image: any
+  image_picker: ^0.7.2+1
 
   cupertino_icons: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.8.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "images/DupiPH.png"
 
 flutter:
   uses-material-design: true
