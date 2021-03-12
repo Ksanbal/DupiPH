@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -46,69 +45,177 @@ class _ResultPageState extends State<ResultPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: Column(
+      // body: Column(
+      //   children: [
+      //     Expanded(
+      //       flex: 5,
+      //       child: Container(
+      //         width: MediaQuery.of(context).size.width,
+      //         color: Color(0xff34A1AE),
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.center,
+      //           children: [
+      //             // 측정결과 Text
+      //             _titleText(),
+      //             // DateText
+      //             // SizedBox(height: 5),
+      //             _dateText(),
+      //             // indicator
+      //             SizedBox(height: 20),
+      //             Stack(
+      //               alignment: Alignment.center,
+      //               children: [
+      //                 // 원형 인디케이터
+      //                 _circleIndicator(),
+      //                 // 인디케이터 안쪽을 자르기위한 컨테이너
+      //                 Container(
+      //                   height: 220,
+      //                   width: 220,
+      //                   decoration: BoxDecoration(
+      //                     color: Color(0xff34A1AE),
+      //                     shape: BoxShape.circle,
+      //                   ),
+      //                 ),
+      //                 // 인디케이터 내부 텍스트
+      //                 _circleText(),
+      //               ],
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //     Expanded(
+      //       flex: 3,
+      //       child: Padding(
+      //         padding: EdgeInsets.all(20),
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.start,
+      //           children: [
+      //             Row(
+      //               children: [
+      //                 Container(
+      //                   height: 18,
+      //                   width: 5,
+      //                   color: Colors.black,
+      //                 ),
+      //                 SizedBox(width: 20),
+      //                 Text(
+      //                   '두피상태',
+      //                   style: TextStyle(
+      //                     color: Colors.black,
+      //                     fontSize: 18,
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //             SizedBox(
+      //               height: 20,
+      //             ),
+      //             // 지성 - 건성 인디케이터
+      //             _barIndicator(),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      body: Stack(
         children: [
-          Expanded(
-            flex: 5,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xff34a1ae),
-                    Color(0xff007f8d),
-                  ],
+          // background
+          Column(
+            children: [
+              Expanded(
+                flex: 4,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Color(0xff34A1AE),
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // 측정결과 Text
-                  _titleText(),
-                  // DateText
-                  SizedBox(height: 5),
-                  _dateText(),
-                  // indicator
-                  SizedBox(height: 20),
-                  _circleIndicator(),
-                ],
+              Expanded(
+                flex: 3,
+                child: Container(
+                  color: Colors.white,
+                ),
               ),
-            ),
+            ],
           ),
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+          // 본문
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              // 측정결과 Text
+              _titleText(),
+              // DateText
+              // SizedBox(height: 5),
+              _dateText(),
+              // indicator
+              SizedBox(height: 20),
+              Stack(
+                alignment: Alignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 15,
-                        width: 5,
-                        color: Colors.black,
-                      ),
-                      SizedBox(width: 20),
-                      Text(
-                        '두피상태',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
+                  // 원형 인디케이터
+                  _circleIndicator(),
+                  // 인디케이터 안쪽을 자르기위한 컨테이너
+                  Container(
+                    height: 220,
+                    width: 220,
+                    decoration: BoxDecoration(
+                      color: Color(0xff34A1AE),
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  // 지성 - 건성 인디케이터
-                  _barIndicator(),
+                  // 인디케이터 내부 텍스트
+                  _circleText(),
                 ],
               ),
-            ),
+              SizedBox(height: 15),
+              // 두피상태
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0),
+                    ),
+                    elevation: 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 125,
+                        right: 125,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '두피상태',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // PH 그래프
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 25, right: 25),
+                  // 지성 - 건성 인디케이터
+                  child: _barIndicator(),
+                ),
+              ),
+              Spacer(flex: 3),
+            ],
           ),
         ],
       ),
@@ -134,6 +241,7 @@ class _ResultPageState extends State<ResultPage>
         IconButton(
             icon: Icon(
               Icons.home,
+              size: 35,
               color: Colors.white,
             ),
             onPressed: () {
@@ -172,7 +280,8 @@ class _ResultPageState extends State<ResultPage>
       '측정결과',
       style: TextStyle(
         fontSize: 17,
-        color: Colors.white,
+        // color: Colors.white,
+        color: Color(0xff7DEFFC),
       ),
     );
   }
@@ -218,36 +327,81 @@ class _ResultPageState extends State<ResultPage>
                 ),
                 color: Colors.white,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '모발 손상도',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Color(0xff325054),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '15%',
-                    style: TextStyle(
-                      fontSize: 55,
-                      color: Color(0xff325054),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '이대로 유지해주세요.',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Color(0xff0099A3),
-                    ),
-                  ),
-                ],
-              ),
+              // child: Column(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Text(
+              //       '모발 손상도',
+              //       style: TextStyle(
+              //         fontSize: 15,
+              //         color: Color(0xff325054),
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //     Text(
+              //       '15%',
+              //       style: TextStyle(
+              //         fontSize: 60,
+              //         color: Color(0xff325054),
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //     Text(
+              //       '이대로 유지해주세요.',
+              //       style: TextStyle(
+              //         fontSize: 15,
+              //         color: Color(0xff0099A3),
+              //         fontWeight: FontWeight.w100,
+              //         // letterSpacing: 5,
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ),
           )),
+    );
+  }
+
+  _circleText() {
+    return Container(
+      child: Container(
+        height: 200,
+        width: 200,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '모발 손상도',
+              style: TextStyle(
+                fontSize: 17,
+                color: Color(0xff325054),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              '15%',
+              style: TextStyle(
+                fontSize: 60,
+                color: Color(0xff325054),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              '이대로 유지해주세요.',
+              style: TextStyle(
+                fontSize: 15,
+                color: Color(0xff0099A3),
+                fontWeight: FontWeight.w100,
+                // letterSpacing: 5,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -258,38 +412,38 @@ class _ResultPageState extends State<ResultPage>
         Row(
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width / 100 * 20,
+              width: MediaQuery.of(context).size.width / 100 * 19.5,
             ),
             Container(
-              height: 45,
-              width: 70,
+              height: 60,
+              width: 90,
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
                   Column(
                     children: [
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: Container(
-                          width: 100,
+                          width: 120,
                           decoration: BoxDecoration(
                             color: Color(0xffce9014),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(50.0)),
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: Center(
                             child: Text(
                               "PH 5.0",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 17,
+                                fontSize: 20,
                               ),
                             ),
                           ),
                         ),
                       ),
                       Spacer(
-                        flex: 1,
+                        flex: 2,
                       ),
                     ],
                   ),
@@ -318,19 +472,27 @@ class _ResultPageState extends State<ResultPage>
         // 인디케이터
         StepProgressIndicator(
           totalSteps: 10,
-          currentStep: 5,
-          size: 30,
+          currentStep: 10,
+          size: 25,
           padding: 2.0,
           roundedEdges: Radius.circular(10),
           selectedGradientColor: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xffd86565), Color(0xff77C9A3)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color(0xffd86565),
+              Color(0xffE6B05D),
+              Color(0xffECB915),
+              Color(0xffCFC628),
+              Color(0xff77C9A3),
+              Color(0xff6AA0C9),
+              Color(0xff7464b7),
+            ],
           ),
           unselectedGradientColor: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xff77C9A3), Color(0xff7464b7)],
+            colors: [Color(0xff77C9A3)],
           ),
         ),
         Row(
