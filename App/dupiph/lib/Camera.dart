@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'Result.dart';
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'GetColor.dart';
-import 'package:path/path.dart';
 
 // import 'SQLite/Model.dart' as mo;
 // import 'SQLite/Database.dart' as db;
@@ -19,6 +18,8 @@ class _CameraPageState extends State<CameraPage> {
   CameraController controller;
   List cameras;
   int selectedCameraIdx;
+
+  // String _imagePath;
 
   Future _initCameraController(CameraDescription cameraDescription) async {
     if (controller != null) {
@@ -78,8 +79,7 @@ class _CameraPageState extends State<CameraPage> {
     return Scaffold(
       appBar: _appBar(),
       extendBodyBehindAppBar: true,
-      // body: _Camera(),
-      body: CameraPreview(controller),
+      body: _camera(),
       floatingActionButton: _floatingActionButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -91,13 +91,10 @@ class _CameraPageState extends State<CameraPage> {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      // actions: [
-      //   _cameraSwitching(),
-      // ],
     );
   }
 
-  _Camera() {
+  _camera() {
     if (controller == null || !controller.value.isInitialized) {
       return Center(
         child: CircularProgressIndicator(),
@@ -125,8 +122,10 @@ class _CameraPageState extends State<CameraPage> {
 
   _floatingActionButton(context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(child: _callGallery()),
+        Expanded(child: _callGallery(context)),
         Expanded(
           child: Stack(
             alignment: Alignment.center,
@@ -182,14 +181,35 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-  _callGallery() {
+  _callGallery(context) {
     return IconButton(
-        icon: Icon(
-          Icons.insert_photo,
-          color: Colors.white,
-          size: 60,
-        ),
-        onPressed: () {});
+      icon: Icon(
+        Icons.insert_photo_outlined,
+        color: Colors.white,
+        size: 45,
+      ),
+      onPressed: () {
+        getImage(context);
+      },
+    );
+  }
+
+  Future getImage(context) async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        // _imagePath = pickedFile.path;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ColorPickerWidget(test_path: pickedFile.path),
+          ),
+        );
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 
   _cameraSwitching() {
@@ -201,9 +221,9 @@ class _CameraPageState extends State<CameraPage> {
 
     return IconButton(
         icon: Icon(
-          Icons.flip_camera_ios,
+          Icons.flip_camera_ios_outlined,
           color: Colors.white,
-          size: 60,
+          size: 45,
         ),
         onPressed: () {
           selectedCameraIdx = selectedCameraIdx < cameras.length - 1
