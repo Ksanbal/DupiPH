@@ -49,7 +49,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("DipiPH"),
+        title: Text("DupiPH"),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -84,6 +84,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                     child: Image.file(
                       // imagePath,
                       File(widget.test_path),
+                      height: MediaQuery.of(context).size.height,
                       key: imageKey,
                       //color: Colors.red,
                       //colorBlendMode: BlendMode.hue,
@@ -132,8 +133,15 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
               "리트머스를 클릭해주세요",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                shadows: [
+                  Shadow(
+                    blurRadius: 10.0,
+                    color: Colors.black,
+                    offset: Offset(0.0, 0.0),
+                  ),
+                ],
+                // fontWeight: FontWeight.bold,
               ),
             ),
           )
