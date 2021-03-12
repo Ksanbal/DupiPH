@@ -13,6 +13,7 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   final Color barBackgroundColor = const Color(0xffdfdfdf).withOpacity(0.43);
   final Duration animDuration = const Duration(milliseconds: 250);
 
@@ -21,8 +22,56 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: _appBar(),
       drawer: _drawer(context),
+      // body: Column(
+      //   mainAxisAlignment: MainAxisAlignment.start,
+      //   children: [
+      //     // 최근 검사기록 차트
+      //     Expanded(
+      //       flex: 4,
+      //       child: Container(
+      //         color: Color(0xff34a1ae),
+      //         child: Padding(
+      //           padding:
+      //               EdgeInsets.only(left: 30, right: 30, bottom: 5, top: 10),
+      //           child: Column(
+      //             children: [
+      //               // Dupi Text
+      //               _textDupi(),
+      //               SizedBox(height: 5),
+      //               // Chart
+      //               _chart(),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     // 현재 날짜, 최신 or 선택 날짜 데이터
+      //     Expanded(
+      //       flex: 5,
+      //       child: Padding(
+      //         padding:
+      //             EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 20),
+      //         child: Column(
+      //           children: [
+      //             // PH
+      //             // Date
+      //             _dateText(),
+      //             SizedBox(height: 10),
+      //             // Box
+      // _alrtBox(),
+      // SizedBox(height: 20),
+      // _phIndi(),
+      // SizedBox(height: 15),
+      // _dmIndi(),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       body: Stack(
         children: [
           // Background Color
@@ -38,10 +87,16 @@ class _IndexPageState extends State<IndexPage> {
                 SizedBox(height: 10),
                 // Chart
                 _chart(),
-                SizedBox(height: 20),
+                SizedBox(height: 25),
                 // Date Text
                 _dateText(),
+                SizedBox(height: 10),
                 // PH
+                _alrtBox(),
+                SizedBox(height: 20),
+                _phIndi(),
+                SizedBox(height: 15),
+                _dmIndi(),
               ],
             ),
           ),
@@ -58,6 +113,11 @@ class _IndexPageState extends State<IndexPage> {
       centerTitle: true,
       backgroundColor: Color(0xff34a1ae),
       elevation: 0,
+      leading: IconButton(
+          icon: Icon(Icons.menu, size: 35),
+          onPressed: () {
+            _scaffoldKey.currentState.openDrawer();
+          }),
     );
   }
 
@@ -159,7 +219,7 @@ class _IndexPageState extends State<IndexPage> {
     return Column(
       children: [
         Expanded(
-          flex: 3,
+          flex: 4,
           child: Container(
             color: Color(0xff34a1ae),
           ),
@@ -177,25 +237,19 @@ class _IndexPageState extends State<IndexPage> {
   // Dupi Text
   _textDupi() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           height: 20,
           width: 5,
           color: Colors.white,
         ),
-        SizedBox(width: 20),
+        SizedBox(width: 10),
         Text(
-          '나의 일주일간 ',
+          '최근 검사기록',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 25,
-          ),
-        ),
-        Text(
-          '두피상태',
-          style: TextStyle(
-            color: Colors.yellow,
-            fontSize: 25,
+            fontSize: 20,
           ),
         ),
       ],
@@ -228,6 +282,18 @@ class _IndexPageState extends State<IndexPage> {
         ),
       ),
     );
+
+    // return Expanded(
+    //   child: Center(
+    //     child: Padding(
+    //       padding: EdgeInsets.only(top: 3),
+    //       child: BarChart(
+    //         mainBarData(),
+    //         swapAnimationDuration: animDuration,
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   // Date Text
@@ -236,15 +302,185 @@ class _IndexPageState extends State<IndexPage> {
 
     return Row(
       children: [
-        Text(
-          '${DateFormat('MM월 dd일').format(DateTime.now())}',
-          style: TextStyle(fontSize: 20),
+        Container(
+          height: 15,
+          width: 5,
+          color: Color(0xff34A1AE),
         ),
+        SizedBox(width: 10),
         Text(
-          '(${weekday[DateTime.now().weekday - 1]})',
-          style: TextStyle(fontSize: 20),
+          '${DateFormat('M월 d일').format(DateTime.now())} (${weekday[DateTime.now().weekday - 1]})',
+          style: TextStyle(fontSize: 18),
         ),
       ],
+    );
+  }
+
+  // 알림 박스
+  _alrtBox() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 80,
+      decoration: BoxDecoration(
+        color: Color(0xffDC600E).withOpacity(0.27),
+        // border: Border.all(
+        //   width: 10,
+        //   color: Color(0xffDC600E),
+        // ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "주의",
+            style: TextStyle(
+              color: Color(0xffCB350E),
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "관리가 필요합니다.",
+            style: TextStyle(
+              color: Color(0xffCB350E),
+              fontSize: 18,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  // PH 지수
+  _phIndi() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 40,
+      child: Stack(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width - 50,
+            height: 60,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color(0xff707070),
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          Container(
+            width: (MediaQuery.of(context).size.width - 50) / 100 * 90,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Color(0xffFFF1CE),
+              border: Border.all(
+                color: Color(0xffE5AA1B),
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "PH6.5",
+                    style: TextStyle(
+                      color: Color(0xffECB020),
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            width: (MediaQuery.of(context).size.width - 50) / 100 * 30,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Color(0xffECB020),
+              // border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Center(
+              child: Text(
+                'PH지수',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 손상도
+  _dmIndi() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 40,
+      child: Stack(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width - 50,
+            height: 60,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color(0xff707070),
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          Container(
+            width: (MediaQuery.of(context).size.width - 50) / 100 * 80,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Color(0xffE0EFF1),
+              border: Border.all(
+                color: Color(0xff34A1AE),
+              ),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "60%",
+                    style: TextStyle(
+                      color: Color(0xff34A1AE),
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            width: (MediaQuery.of(context).size.width - 50) / 100 * 30,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Color(0xff34A1AE),
+              // border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Center(
+              child: Text(
+                '손상도',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -253,22 +489,26 @@ class _IndexPageState extends State<IndexPage> {
     int x,
     double y, {
     bool isTouched = false,
-    Color barColor = const Color(0xffdfdfdf),
-    double width = 22,
+    Color barColor = const Color(0xffBED4D6),
+    double width = 26,
     List<int> showTooltips = const [],
   }) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
-          y: isTouched ? y + 1 : y,
+          y: isTouched ? y + 3 : y,
           colors: isTouched ? [Color(0xfff3d386)] : [barColor],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 20,
-            colors: [barBackgroundColor],
+            y: 14,
+            // colors: [barBackgroundColor],
+            colors: [Color(0xffffffff)],
           ),
+          // borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
       ],
       showingTooltipIndicators: showTooltips,
@@ -278,25 +518,28 @@ class _IndexPageState extends State<IndexPage> {
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
+            return makeGroupData(0, 2, isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(1, 4, isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
+            return makeGroupData(2, 6, isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+            return makeGroupData(3, 8, isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
+            return makeGroupData(4, 10, isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+            return makeGroupData(5, 12, isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(6, 14, isTouched: i == touchedIndex);
+
           default:
             return null;
         }
       });
 
   BarChartData mainBarData() {
+    List weekday = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
@@ -305,25 +548,31 @@ class _IndexPageState extends State<IndexPage> {
               String weekDay;
               switch (group.x.toInt()) {
                 case 0:
-                  weekDay = '월요일';
+                  weekDay =
+                      '${weekday[DateTime.now().subtract(Duration(days: 6)).weekday - 1]}';
                   break;
                 case 1:
-                  weekDay = '화요일';
+                  weekDay =
+                      '${weekday[DateTime.now().subtract(Duration(days: 5)).weekday - 1]}';
                   break;
                 case 2:
-                  weekDay = '수요일';
+                  weekDay =
+                      '${weekday[DateTime.now().subtract(Duration(days: 4)).weekday - 1]}';
                   break;
                 case 3:
-                  weekDay = '목요일';
+                  weekDay =
+                      '${weekday[DateTime.now().subtract(Duration(days: 3)).weekday - 1]}';
                   break;
                 case 4:
-                  weekDay = '금요일';
+                  weekDay =
+                      '${weekday[DateTime.now().subtract(Duration(days: 2)).weekday - 1]}';
                   break;
                 case 5:
-                  weekDay = '토요일';
+                  weekDay =
+                      '${weekday[DateTime.now().subtract(Duration(days: 1)).weekday - 1]}';
                   break;
                 case 6:
-                  weekDay = '일요일';
+                  weekDay = '${weekday[DateTime.now().weekday - 1]}';
                   break;
               }
               return BarTooltipItem(weekDay + '\n' + (rod.y - 1).toString(),
@@ -346,24 +595,24 @@ class _IndexPageState extends State<IndexPage> {
         bottomTitles: SideTitles(
           showTitles: true,
           getTextStyles: (value) => const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14),
-          margin: 16,
+              color: Colors.black, fontWeight: FontWeight.normal, fontSize: 14),
+          margin: 8,
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return '월';
+                return '${DateFormat('M.d').format(DateTime.now().subtract(Duration(days: 6)))}';
               case 1:
-                return '화';
+                return '${DateFormat('M.d').format(DateTime.now().subtract(Duration(days: 5)))}';
               case 2:
-                return '수';
+                return '${DateFormat('M.d').format(DateTime.now().subtract(Duration(days: 4)))}';
               case 3:
-                return '목';
+                return '${DateFormat('M.d').format(DateTime.now().subtract(Duration(days: 3)))}';
               case 4:
-                return '금';
+                return '${DateFormat('M.d').format(DateTime.now().subtract(Duration(days: 2)))}';
               case 5:
-                return '토';
+                return '${DateFormat('M.d').format(DateTime.now().subtract(Duration(days: 1)))}';
               case 6:
-                return '일';
+                return '${DateFormat('M.d').format(DateTime.now())}';
               default:
                 return '';
             }
